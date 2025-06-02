@@ -2,7 +2,6 @@
 {
   "orgName": "Ursa Major Events",
   "edition": "Partner Developer",
-  "release": "preview",
   "features": [
     "EnableSetPasswordInApi",
     "CustomerDataPlatform",
