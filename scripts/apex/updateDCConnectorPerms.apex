@@ -2,7 +2,11 @@ List<String> sObjectTypeNames = new List<String>{'mvpbo3__Volunteer_Event__c', '
 
 // Query the Data Cloud Salesforce Connector, api name changes between Spring and Summer release
 PermissionSet permSet = [SELECT Id FROM PermissionSet WHERE Name = 'sfdc_a360_sfcrm_data_extract' or Name = 'sfdc_c360a_sfdctrust_permSet' LIMIT 1];
-
+// if no permsets are returned, print message and exit
+if (permSet == null) {
+    System.debug('No permission sets found, Data Cloud is not provisioned.');
+    return;
+}
 List<ObjectPermissions> objectPermList = new List<ObjectPermissions>();
 List<FieldPermissions> fieldPermsList = new List<FieldPermissions>();
 
@@ -41,8 +45,15 @@ for (String sObjectTypeName : sObjectTypeNames) {
 }
 // Insert the ObjectPermissions object
 try {
-  System.debug(objectPermList);
-    upsert objectPermList;
+    System.debug(objectPermList);
+    Database.UpsertResult[] objPermResults = Database.upsert(objectPermList, false);
+    for (Database.UpsertResult result : objPermResults) {
+      if (!result.isSuccess()) {
+          for (Database.Error error : result.getErrors()) {
+              System.debug('Error upserting ObjectPermissions: ' + error.getMessage());
+          }
+      }
+  }
     System.debug('Object permission added successfully.');
 } catch (DmlException e) {
     System.debug('An error occurred: ' + e.getMessage());
@@ -50,8 +61,15 @@ try {
 
 // Upsert the lis of field permissions
 try {
-  System.debug(fieldPermsList);
-    upsert fieldPermsList;
+    System.debug(fieldPermsList);
+    Database.UpsertResult[] fieldPermResults = Database.upsert(fieldPermsList, false);
+    for (Database.UpsertResult result : fieldPermResults) {
+        if (!result.isSuccess()) {
+            for (Database.Error error : result.getErrors()) {
+                System.debug('Error upserting FieldPermissions: ' + error.getMessage());
+            }
+        }
+    }
     System.debug('Field permissions added successfully.');
 } catch (DmlException e) {
     System.debug('An error occurred while adding field permissions: ' + e.getMessage());
