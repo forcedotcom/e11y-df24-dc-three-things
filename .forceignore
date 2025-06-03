@@ -15,3 +15,7 @@ package.xml
 **/*.ts
 
 **ssot**
+
+# Entries added by cleanupDataSourceObjects.js
+data-app/dataSourceObjects/mvpbo3_Volunteer_Event_c_Home.dataSourceObject-meta.xml
+data-app/dataSourceObjects/mvpbo3_Volunteer_Event_Participant_Home.dataSourceObject-meta.xml
