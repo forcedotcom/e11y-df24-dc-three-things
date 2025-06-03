@@ -15,6 +15,7 @@ This repo compliments my Dreamforce 2024 session, Three Things About Extending D
       - [Install Base App](#install-base-app)
       - [Install Data Cloud Package](#install-data-cloud-package)
       - [Install Data Cloud Extension](#install-data-cloud-extension)
+    - [Install Volunteer Events Admin Permission Set](#install-volunteer-events-admin-permission-set)
     - [Import Data](#import-data)
     - [Deploy Data Kit \& Ingest Data](#deploy-data-kit--ingest-data)
     - [Add Data Cloud LWC to Record Page](#add-data-cloud-lwc-to-record-page)
@@ -25,8 +26,10 @@ This repo compliments my Dreamforce 2024 session, Three Things About Extending D
       - [Create Scratch Org](#create-scratch-org)
     - [Deploy App](#deploy-app)
       - [Deploy Base App](#deploy-base-app)
-      - [Update System Admin \& Data Cloud Salesforce Connector Perms](#update-system-admin--data-cloud-salesforce-connector-perms)
+      - [Install \& Assign User Volunteer Event Admin Permission Set](#install--assign-user-volunteer-event-admin-permission-set)
+      - [Grant Data Cloud Connector Access to New sObjects](#grant-data-cloud-connector-access-to-new-sobjects)
       - [Deploy Data Cloud Metadata in the form of a Data Kit](#deploy-data-cloud-metadata-in-the-form-of-a-data-kit)
+        - [Deploy Data Kit Contents](#deploy-data-kit-contents)
       - [Deploy Data Cloud Extension Package](#deploy-data-cloud-extension-package)
     - [Create Packages](#create-packages)
       - [Base App (force-app)](#base-app-force-app)
@@ -59,21 +62,25 @@ The repo is comprised of three parts:
 
 ### Clone repo and Install Dependencies
 
-`git clone git@github.com:forcedotcom/df24-dc-three-things.git`
+`git clone git@github.com:forcedotcom/e11y-df24-dc-three-things.git`
 
-`cd df24-dc-three-things`
+`cd e11y-df24-dc-three-things`
 
 `npm i`
 
 ### Deploy Volunteer Events App
 
+Set your install org as the default target org in config.
+
+`sf config set target-org={ALIAS}`
+
 #### Install Base App
 
-[https://login.salesforce.com/packaging/installPackage.apexp?p0=04tHs000000mAndIAE](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tHs000000mAndIAE)
+[https://login.salesforce.com/packaging/installPackage.apexp?p0=04tHs000000n9w4IAA](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tHs000000n9w4IAA)
 
 or
 
-`sf package install -p 04tHs000000mAndIAE -w 10 -o {ALIAS}`
+`sf package install -p 04tHs000000n9w4IAA -w 10`
 
 #### Install Data Cloud Package
 
@@ -83,25 +90,31 @@ Before installing, update the Data Cloud Salesforce Connector permission set. Gr
 
 Install package
 
-[https://login.salesforce.com/packaging/installPackage.apexp?p0=04tHs000000mAniIAE](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tHs000000mAniIAE)
+[https://login.salesforce.com/packaging/installPackage.apexp?p0=04tHs000000n9w9IAA](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tHs000000n9w9IAA)
 
 or
 
-`sf package install -p 04tHs000000mAniIAE -w 10 -o {ALIAS}`
+`sf package install -p 04tHs000000n9w9IAA -w 10`
 
 #### Install Data Cloud Extension
 
-[https://login.salesforce.com/packaging/installPackage.apexp?p0=04tHs000000mAo7IAE](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tHs000000mAo7IAE)
+[https://login.salesforce.com/packaging/installPackage.apexp?p0=04tHs000000n9xqIAA](https://login.salesforce.com/packaging/installPackage.apexp?p0=04tHs000000n9xqIAA)
 
 or
 
-`sf package install -p 04tHs000000mAo7IAE -w 10 -o {ALIAS}`
+`sf package install -p 04tHs000000n9xqIAA -w 10`
+
+### Install Volunteer Events Admin Permission Set
+
+`sf project deploy start -d unmanaged`
 
 ### Import Data
 
-The next steps use the Salesforce CLI to import data. Set your install org as the default target org in config.
+The next steps use the Salesforce CLI to import data.
 
-`sf config set target-org={ALIAS}`
+Grant user access to Voluneer Event objects
+
+`sf org assign permset -n Volunteer_Event_Admin`
 
 Import Contacts and Volunteer Event records into the org.
 
@@ -117,12 +130,9 @@ If you ever need to start from scratch with the data, run `npm run deleteVolunte
 
 The contents of the Data Kit will now be deployed into Data Streams, Data Lake Objects, and Data Model Objects.
 
-- Open your org
-- Go to Data Cloud App > Data Stream > New
-- Pick Connected Sources, Salesforce CRM, Next
-- Pick VolunteerEventBundle, Next
-- Keep default values, Next
-- Deploy
+- Data Cloud Setup > Data Kits > VolunteerEventDK
+- Click "Data Kit Deploy"
+- Enter the 15 character Org Id of your current org
 
 Once the Data Streams are deployed, trigger a refresh of the data to consume the rows you inserted into CRM in the prior step.
 
@@ -158,9 +168,9 @@ Before getting into packaging, we will first install the app into a scratch org 
 
 Clone, install dependencies, and set config
 
-`git clone git@github.com:forcedotcom/df24-dc-three-things.git`
+`git clone git@github.com:forcedotcom/e11y-df24-dc-three-things.git`
 
-`cd df24-dc-three-things`
+`cd e11y-df24-dc-three-things`
 
 `npm i`
 
@@ -178,11 +188,11 @@ Now that we have updated filenames and file content with your namespace, we can 
 
 Create the scratch org and set it to be the default for this project.
 
-`sf org create scratch -d -a df24ThreeThings -f config/project-scratch-def.json -w 10 -y 30`
+`sf org create scratch -d -a df24ThreeThings -f config/dc-project-scratch-def.json -w 10 -y 30`
 
-Create the customer org.
+Create the customer org (no namespace).
 
-`sf org create scratch -a df24ThreeThingsCustomer --no-namespace -f config/project-scratch-def.json -w 10 -y 30`
+`sf org create scratch -a df24ThreeThingsCustomer --no-namespace -f config/dc-project-scratch-def.json -w 10 -y 30`
 
 ### Deploy App
 
@@ -192,34 +202,27 @@ Deploy the base app into your `df24ThreeThings` scratch org. Data Cloud is activ
 
 `sf project deploy start -w 10 -d force-app`
 
-#### Update System Admin & Data Cloud Salesforce Connector Perms
+#### Install & Assign User Volunteer Event Admin Permission Set
 
-Update the System Admin profile and Data Cloud Salesforce Connector permission set. The following script grants View All at the object level and Read access to all fields contained within the base app.
+`sf project deploy start -w 10 -d unmanaged`
+
+`sf org assign permset -n Volunteer_Event_Admin`
+
+#### Grant Data Cloud Connector Access to New sObjects
+
+Before installing the Data Kit, update the Data Cloud Salesforce Connector permission set. Grant View All at the object level and Read access to all fields.
 
 `sf apex run -f scripts/apex/updateDCConnectorPerms.apex`
-
-Grant App Visibility to System Admin profile
-
-- Setup > Profiles > System Admin > Edit
-- Check Visibile checkbox for Volunteer Events custom app
-- Save
-
-Grant Object Permissions for System Admin profile
-
-- Setup > Profiles > System Admin
-- Grant View All/ Modify All to `{NAMESPACE}__Volunteer_Event__c` & `{NAMESPACE}__Volunteer_Event_Participant__c`
-- Grant Edit permissions to all fields
-- Save
-
-Install Sales Cloud Data Bundle
-
-- Data Cloud Setup > Salesforce CRM > Sales Cloud
-- Click Drop Down Arrow, Click Install
-- Install for Admins Only
 
 #### Deploy Data Cloud Metadata in the form of a Data Kit
 
 `sf project deploy start -w 10 -d data-app`
+
+##### Deploy Data Kit Contents
+
+- Data Cloud Setup > Data Kits > VolunteerEventDK
+- Click "Data Kit Deploy"
+- Enter the 15 character Org Id of your current org
 
 #### Deploy Data Cloud Extension Package
 
@@ -235,19 +238,33 @@ The repo contains `packageAliases` within `sfdx-project.json` which may interfer
 
 `sf package create -n df24ThreeThings -t Managed -r force-app`
 
-`sf package version create -f config/project-scratch-def.json --installation-key-bypass -d force-app -w 10 -p df24ThreeThings`
+Create the package version. **Note** for this package version, we are using a different scratch definition that does not include Data Cloud. This is done to speed up the package version creation process.
+
+`sf package version create -c -f config/platform-project-scratch-def.json --installation-key-bypass -d force-app -w 10 -p df24ThreeThings`
+
+Take the `04t` Id output from the previous step and use it to promote the package version.
+
+`sf package version promote -p {04t ID}`
 
 #### Data Cloud App (data-app)
 
 `sf package create -n df24ThreeThingsDC -t Managed -r data-app`
 
-`sf package version create -f config/project-scratch-def.json --installation-key-bypass -w 100 -p df24ThreeThingsDC`
+`sf package version create -c -f config/dc-project-scratch-def.json --installation-key-bypass -w 100 -p df24ThreeThingsDC`
+
+Take the `04t` Id output from the previous step and use it to promote the package version.
+
+`sf package version promote -p {04t ID}`
 
 #### Data Cloud App Extension (data-app-ext)
 
 `sf package create -n df24ThreeThingsDCExt -t Managed -r data-app-ext`
 
-`sf package version create -f config/project-scratch-def.json --installation-key-bypass -w 100 -p df24ThreeThingsDCExt`
+`sf package version create -c -f config/dc-project-scratch-def.json --installation-key-bypass -w 100 -p df24ThreeThingsDCExt`
+
+Take the `04t` Id output from the previous step and use it to promote the package version.
+
+`sf package version promote -p {04t ID}`
 
 ### Package Deployment
 

@@ -414,5 +414,6 @@
     <masterLabel>mvpbo3__Volunteer_Event__c_Home</masterLabel>
     <objectType>Object</objectType>
     <sourceObject>mvpbo3__mvpbo3_Volunteer_Event_c_Home__dll</sourceObject>
+    <storageType>LOCAL</storageType>
     <templateVersion>1</templateVersion>
 </DataSourceObject>

@@ -1,12 +1,13 @@
 {
   "packageDirectories": [
     {
-      "versionName": "ver 0.1",
-      "versionNumber": "0.1.0.NEXT",
+      "versionName": "ver 0.2",
+      "versionNumber": "0.2.0.NEXT",
       "path": "force-app",
       "default": true,
       "package": "df24ThreeThings",
-      "versionDescription": ""
+      "versionDescription": "",
+      "ancestorVersion": "HIGHEST"
     },
     {
       "versionName": "ver 0.1",
@@ -14,26 +15,19 @@
       "path": "data-app",
       "default": false,
       "package": "df24ThreeThingsDC",
-      "versionDescription": "",
-      "dependencies": [
-        {
-          "package": "04t5Y0000015oSB"
-        }
-      ]
+      "versionDescription": ""
     },
     {
-      "versionName": "ver 0.1",
-      "versionNumber": "0.1.0.NEXT",
+      "versionName": "ver 0.2",
+      "versionNumber": "0.2.1.NEXT",
       "path": "data-app-ext",
       "default": false,
       "package": "df24ThreeThingsDCExt",
       "versionDescription": "",
+      "ancestorVersion": "HIGHEST",
       "dependencies": [
         {
-          "package": "df24ThreeThings@0.1.0-1"
-        },
-        {
-          "package": "04t5Y0000015oSB"
+          "package": "df24ThreeThings@0.2.0-1"
         },
         {
           "package": "df24ThreeThingsDC@0.1.0-1"
@@ -48,9 +42,13 @@
   "packageAliases": {
     "df24ThreeThings": "0HoHs000000fzeOKAQ",
     "df24ThreeThings@0.1.0-1": "04tHs000000mAndIAE",
-    "df24ThreeThingsDC": "0HoHs000000fzeTKAQ",
-    "df24ThreeThingsDC@0.1.0-1": "04tHs000000mAniIAE",
     "df24ThreeThingsDCExt": "0HoHs000000fzeYKAQ",
-    "df24ThreeThingsDCExt@0.1.0-1": "04tHs000000mAo7IAE"
+    "df24ThreeThingsDCExt@0.1.0-1": "04tHs000000mAo7IAE",
+    "df24ThreeThings@0.1.0-2": "04tHs000000mpvSIAQ",
+    "df24ThreeThings@0.2.0-1": "04tHs000000n9w4IAA",
+    "df24ThreeThingsDC": "0HoHs000000g3DyKAI",
+    "df24ThreeThingsDC@0.1.0-1": "04tHs000000n9w9IAA",
+    "df24ThreeThingsDCExt@0.2.0-1": "04tHs000000n9xCIAQ",
+    "df24ThreeThingsDCExt@0.2.1-1": "04tHs000000n9xqIAA"
   }
 }
