@@ -1,49 +1,76 @@
 /**
- * This class contains unit tests for validating the behavior of Apex classes
- * and triggers.
- *
- * Unit tests are class methods that verify whether a particular piece
- * of code is working properly. Unit test methods take no arguments,
- * commit no data to the database, and are flagged with the testMethod
- * keyword in the method definition.
- *
- * All test methods in an org are executed whenever Apex code is deployed
- * to a production org to confirm correctness, ensure code
- * coverage, and prevent regressions. All Apex classes are
- * required to have at least 75% code coverage in order to be deployed
- * to a production org. In addition, all triggers must have some code coverage.
- * 
- * The @isTest class annotation indicates this class only contains test
- * methods. Classes defined with the @isTest annotation do not count against
- * the org size limit for all Apex scripts.
- *
- * See the Apex Language Reference for more information about Testing and Code Coverage.
+ * Test class for the VolunteerEventParticipantService class.
  */
 @isTest
 private class VolunteerEventParticipantServiceTest {
+  @isTest
+  static void testGetParticipantsByRecordId() {
+    // This Id is passed to your service method. Its actual value might be
+    // less critical if your mock doesn't specifically use it to vary the response,
+    // but it's still part of the input to the method under test.
+    Id testEventRecordId = 'a01xx00000zyxwV'; // Dummy or representative Id
 
-@isTest
-    static void testGetParticipantsByRecordId() {
-        // Create a test record
-        mvpbo3__Volunteer_Event_Participant_Home__dlm volEventPartRec = new mvpbo3__Volunteer_Event_Participant_Home__dlm();
-        volEventPartRec.mvpbo3__Id__c = 'TestId';
-        volEventPartRec.mvpbo3__Name__c = 'Test Name';
-        insert volEventPartRec;
+    Test.startTest();
+    // Call the method from VolunteerEventParticipantService.cls
+    List<Object> results = VolunteerEventParticipantService.getParticipantsByRecordId(
+      testEventRecordId
+    );
+    Test.stopTest();
 
-        // Set up the test data
-        Id recordId = volEventPartRec.Id;
+    // --- Assertions ---
+    System.assertNotEquals(
+      null,
+      results,
+      'The result list should not be null.'
+    );
+    // We added two rows in our mock data
+    System.assertEquals(
+      2,
+      results.size(),
+      'The result list should contain two records based on the mock.'
+    );
 
-        // Call the method being tested
-        Test.startTest();
-        List<Object> result = VolunteerEventParticipantService.getParticipantsByRecordId(recordId);
-        Test.stopTest();
+    if (results.size() == 2) {
+      // Check first record (transformed into Map<String, Object> by your service)
+      Map<String, Object> record1 = (Map<String, Object>) results[0];
+      System.assertEquals(
+        'mockDlmId001',
+        record1.get('mvpbo3__Id__c'),
+        'Record 1: ID from mock mismatch.'
+      );
+      System.assertEquals(
+        'Test Participant Mock Name',
+        record1.get('mvpbo3__Name__c'),
+        'Record 1: Name from mock mismatch.'
+      );
+      System.assertNotEquals(
+        null,
+        record1.get('mvpbo3__CreatedDate__c'),
+        'Record 1: CreatedDate should be present.'
+      );
+      System.assertEquals(
+        '003xx00000abcdEFG',
+        record1.get('mvpbo3__mvpbo3_Participant_c__c'),
+        'Record 1: Participant SFID mismatch.'
+      );
+      System.assertEquals(
+        'a01xx00000zyxwVUT',
+        record1.get('mvpbo3__mvpbo3_Volunteer_Event_c__c'),
+        'Record 1: Event SFID mismatch.'
+      );
 
-        // Assert that the result is not null and contains the expected data
-        System.assertNotEquals(null, result);
-        System.assertEquals(1, result.size());
-
-        Map<String, Object> record = result[0];
-        System.assertEquals(volEventPartRec.mvpbo3__Id__c, record.get('mvpbo3__Id__c'));
-        System.assertEquals(volEventPartRec.mvpbo3__Name__c, record.get('mvpbo3__Name__c'));
+      // Check second record
+      Map<String, Object> record2 = (Map<String, Object>) results[1];
+      System.assertEquals(
+        'mockDlmId002',
+        record2.get('mvpbo3__Id__c'),
+        'Record 2: ID from mock mismatch.'
+      );
+      System.assertEquals(
+        'Another Mock Participant',
+        record2.get('mvpbo3__Name__c'),
+        'Record 2: Name from mock mismatch.'
+      );
     }
+  }
 }
