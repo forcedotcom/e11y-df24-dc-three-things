@@ -1,0 +1,29 @@
+
+{
+  "orgName": "Ursa Major Events",
+  "edition": "Partner Developer",
+  "features": [
+    "EnableSetPasswordInApi",
+    "EinsteinGPTForDevelopers"
+  ],
+  "settings": {
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true,
+      "enableUsersAreLightningOnly": true,
+      "enableLexEndUsersNoSwitching": "true"
+    },
+    "mobileSettings": {
+      "enableS1EncryptedStoragePref2": false
+    },
+    "securitySettings": {
+      "enableAdminLoginAsAnyUser": true,
+      "passwordPolicies": {
+        "expiration": "Never",
+        "historyRestriction": "0"
+      },
+      "sessionSettings": {
+        "sessionTimeout": "TwelveHours"
+      }
+    }
+  }
+}
