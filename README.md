@@ -62,7 +62,7 @@ The repo is comprised of three parts:
 
 ### Clone repo and Install Dependencies
 
-`git@github.com:forcedotcom/e11y-df24-dc-three-things.git`
+`git clone git@github.com:forcedotcom/e11y-df24-dc-three-things.git`
 
 `cd e11y-df24-dc-three-things`
 
@@ -168,7 +168,7 @@ Before getting into packaging, we will first install the app into a scratch org 
 
 Clone, install dependencies, and set config
 
-`git@github.com:forcedotcom/e11y-df24-dc-three-things.git`
+`git clone git@github.com:forcedotcom/e11y-df24-dc-three-things.git`
 
 `cd e11y-df24-dc-three-things`
 
